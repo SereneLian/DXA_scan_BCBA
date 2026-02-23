@@ -47,6 +47,19 @@ def backgroup_map(image):
     return image
 
 
+def sample_weights(tran_data, age_cut=65):
+    # tran_data['AL'] = pd.cut(x=tran_data['Age when attended assessment centre | Instance 2'], bins=[40, 50, 60, 70, 90], labels=[0, 1, 2, 3])
+    tran_data['AL'] = pd.cut(x=tran_data['Age when attended assessment centre | Instance 2'], bins=[40, age_cut, 90], labels=[0, 1])
+    class_counts = [tran_data['AL'].value_counts()[0],  tran_data['AL'].value_counts()[1],
+            tran_data['AL'].value_counts()[2],tran_data['AL'].value_counts()[3]]
+    labels =  tran_data['AL'].to_list()
+    num_samples = len(tran_data)
+    class_weights = [num_samples / class_counts[i] for i in range(len(class_counts))]
+    weights = [class_weights[labels[i]] for i in range(num_samples)]
+
+    sampler = WeightedRandomSampler(torch.DoubleTensor(weights), num_samples)
+    return sampler
+    
 
 train_preprocess = transforms.Compose([
     transforms.Lambda(crop_hf),
@@ -92,11 +105,14 @@ class DXADataset(Dataset):
 
 ### pytorch sampler
 
+
 train_dataset = DXADataset('train.csv',train_preprocess)
 valid_dataset = DXADataset('val.csv',preprocess) 
 test_dataset = DXADataset('test.csv',preprocess)
 
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+train_sampler = sample_weights(train_data)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=False, sampler=train_sampler)
+# train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 valid_loader = DataLoader(valid_dataset, batch_size=64, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=64)
 
