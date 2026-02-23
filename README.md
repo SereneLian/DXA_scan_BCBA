@@ -7,4 +7,4 @@ Samples were grouped into age bins (5/10/15-year intervals, or under xx-age/over
 
 The binning strategy and weighting scheme should be determined based on the age distribution of the dataset under analysis. 
 
-Morever, finetuning can also improve this. Besdeis,regression-based age-bias correction can also solve (correcting regression-to-the-mean effects by regressing predicted age on chronological age and using residuals as age gap). 
+Besdeis,regression-based age-bias correction can also solve (correcting regression-to-the-mean effects by regressing predicted age on chronological age and using residuals as age gap). 
