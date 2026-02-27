@@ -1,5 +1,5 @@
 # DXA_scan_BCBA
-This is the official code for Body Composition Biological Age – A deep learning sex-specific body composition ageing biomarker using DXA scan
+This is the example code for Body Composition Biological Age – A deep learning sex-specific body composition ageing biomarker using DXA scan
 
 Note on age reweighting: Due to imbalance in the age distribution of the reference cohort, age-stratified weighting was applied during model training. 
 
